@@ -16,10 +16,23 @@ const promise = new MyPromise((resolve, reject) => {
   setTimeout(() => {
     resolve('成功')
   }, 3000)
+  // resolve('成功')
   // reject('失败')
 })
 promise.then((res) => {
-  console.log(res);
+  console.log('1 --- ', res);
 },(err) => {
-  console.log(err);
+  console.log('1 --- ', err);
+})
+
+promise.then((res) => {
+  console.log('2 --- ', res);
+},(err) => {
+  console.log('2 --- ', err);
+})
+
+promise.then((res) => {
+  console.log('3 --- ', res);
+},(err) => {
+  console.log('3 --- ', err);
 })

@@ -13,9 +13,9 @@ class MyPromise {
   // 失败之后的原因
   reason = undefined
   // 成功回调
-  successCallback = undefined
+  successCallback = []
   // 失败回调
-  failCallback = undefined
+  failCallback = []
 
   resolve = value => {
     // 如果状态不是等待 阻止程序向下执行
@@ -25,7 +25,8 @@ class MyPromise {
     // 保存成功之后的值
     this.value = value
     // 判断成功回调是否存在 如果存在就调用
-    this.successCallback && this.successCallback(this.value)
+    // this.successCallback && this.successCallback(this.value)
+    while (this.successCallback.length) this.successCallback.shift()(this.value)
   }
   reject = reason => {
     // 如果状态不是等待 阻止程序向下执行
@@ -35,7 +36,8 @@ class MyPromise {
     // 保存失败之后的原因
     this.reason = reason
     // 判断失败回调是否存在 如果存在就调用
-    this.failCallback && this.failCallback(this.reason)
+    // this.failCallback && this.failCallback(this.reason)
+    while (this.failCallback.length) this.failCallback.shift()(this.reason)
   }
   then (successCallback, failCallback) {
     if (this.status === FULFILLED) {
@@ -45,8 +47,8 @@ class MyPromise {
     } else {
       // 等待
       // 将成功回调和失败回调存储起来
-      this.successCallback = successCallback
-      this.failCallback = failCallback
+      this.successCallback.push(successCallback)
+      this.failCallback.push(failCallback)
     }
   }
 }
