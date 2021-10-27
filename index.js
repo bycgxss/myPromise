@@ -13,7 +13,9 @@
 const MyPromise = require("./myPromise");
 
 const promise = new MyPromise((resolve, reject) => {
-  resolve('成功')
+  setTimeout(() => {
+    resolve('成功')
+  }, 3000)
   // reject('失败')
 })
 promise.then((res) => {
