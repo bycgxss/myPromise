@@ -13,26 +13,23 @@
 const MyPromise = require("./myPromise");
 
 const promise = new MyPromise((resolve, reject) => {
-  setTimeout(() => {
-    resolve('成功')
-  }, 3000)
-  // resolve('成功')
+  // setTimeout(() => {
+  //   resolve('成功')
+  // }, 3000)
+  resolve('成功')
   // reject('失败')
 })
-promise.then((res) => {
-  console.log('1 --- ', res);
-},(err) => {
-  console.log('1 --- ', err);
-})
 
-promise.then((res) => {
-  console.log('2 --- ', res);
-},(err) => {
-  console.log('2 --- ', err);
-})
+function other () {
+  return new MyPromise((resolve, reject) => {
+    resolve('other')
+  })
+}
 
-promise.then((res) => {
-  console.log('3 --- ', res);
-},(err) => {
-  console.log('3 --- ', err);
+promise.then(res => {
+  console.log(res);
+  return other()
+})
+.then(res => {
+  console.log(res);
 })

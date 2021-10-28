@@ -40,16 +40,34 @@ class MyPromise {
     while (this.failCallback.length) this.failCallback.shift()(this.reason)
   }
   then (successCallback, failCallback) {
-    if (this.status === FULFILLED) {
-      successCallback(this.value)
-    } else if (this.status === REJECTED) {
-      failCallback(this.reason)
-    } else {
-      // 等待
-      // 将成功回调和失败回调存储起来
-      this.successCallback.push(successCallback)
-      this.failCallback.push(failCallback)
-    }
+    const promise2 = new MyPromise((resolve, reject) => {
+      if (this.status === FULFILLED) {
+        const x = successCallback(this.value)
+        // 判断 x 的值是普通值还是promise对象
+        // 如果是普通值，直接调用 resolve
+        // 如果是promise对象 查看promise对象返回的结果
+        // 再根据promise返回结果 决定调用resolve还是reject
+        resolvePromise(x, resolve, reject)
+      } else if (this.status === REJECTED) {
+        failCallback(this.reason)
+      } else {
+        // 等待
+        // 将成功回调和失败回调存储起来
+        this.successCallback.push(successCallback)
+        this.failCallback.push(failCallback)
+      }
+    })
+    return promise2
+  }
+}
+
+function resolvePromise (x, resolve, reject) {
+  if (x instanceof MyPromise) {
+    // promise 对象
+    x.then(resolve, reject)
+  } else {
+    // 普通值
+    resolve(x)
   }
 }
 
